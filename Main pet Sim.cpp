@@ -2,6 +2,8 @@
 #include <iostream>    // For input/output
 #include <string>      // For std::string
 
+// ---------- ENUMS AND THEIR STRING CONVERTERS ----------
+
 // Enum to represent different pet types
 enum PetType {
     Dog = 1,
@@ -10,14 +12,14 @@ enum PetType {
     Bunny,
 };
 
-// Function to get string value of PetType
+// Function to convert PetType to string
 auto getPetType(PetType pt){
     switch(pt){
         case Dog: return "Dog";
         case Cat: return "Cat";
         case Hamster: return "Hamster";
         case Bunny: return "Bunny";
-        default: return "Alien Pet ";  // Just in case something goes wild lol
+        default: return "Alien Pet ";  // If something wild happens
     }
 }
 
@@ -30,7 +32,7 @@ enum PetColor {
     Biege,
 };
 
-// Converts PetColor enum to a readable string
+// Converts PetColor enum to readable string
 auto getPetColor(PetColor pc){
     switch (pc) {
         case Black: return "Black";
@@ -54,16 +56,16 @@ enum PetMood {
 // Converts PetMood to string
 auto getPetMood(PetMood pm){
     switch(pm){
-        case Happy: return "Happey"; // minor typo here, just sayin
+        case Happy: return "Happy";
         case Sad: return "Sad";
         case Angry: return "Angry";
         case Sick: return "Sick";
         case Playful: return "Playful";
-        default: return "You Ok? Buddy";
+        default: return "You Ok? Buddy"; // fallback
     }
 }
 
-// Hunger level enum
+// Enum for hunger levels
 enum PetHungerLvl {
     Full = 100,
     Satisfied = 60,
@@ -71,7 +73,7 @@ enum PetHungerLvl {
     Starving = 10,
 };
 
-// Converts PetHungerLvl to string
+// Converts hunger level enum to readable string
 auto getPetHunger(PetHungerLvl phl){
     switch (phl) {
         case Full: return "Full";
@@ -82,7 +84,7 @@ auto getPetHunger(PetHungerLvl phl){
     }
 }
 
-// Base pet class — holds common stuff for all pets
+// ---------- BASE CLASS: PETADOPTING ----------
 class PetAdopting {
 protected:
     std::string pName;
@@ -93,40 +95,52 @@ protected:
     PetHungerLvl pHunger;
 
 public:
-    // Constructor for pet
-    PetAdopting(std::string nameP,int ageP,PetType typeP,PetColor colorP,PetMood moodP,PetHungerLvl hungerP)
-    :pName(nameP),pAge(ageP),pType(typeP),pColor(colorP),pMood(moodP),pHunger(hungerP){}
+    // Constructor for new pet
+    PetAdopting(std::string nameP, int ageP, PetType typeP, PetColor colorP, PetMood moodP, PetHungerLvl hungerP)
+        : pName(nameP), pAge(ageP), pType(typeP), pColor(colorP), pMood(moodP), pHunger(hungerP) {}
 
-    // Get mood and hunger (not used currently, but could be)
-    auto getMood() const { return pMood;}
-    auto getHunger() const { return pHunger;}
+    virtual ~PetAdopting() = default; // So delete works properly with derived classes
 
-    // Feeding logic — increases hunger level and changes mood
-    void FeedPet(){
-        std::cout << " This will Increase ya pet's Hunger lvl \n ";
+    auto getMood() const { return pMood; }
+    auto getHunger() const { return pHunger; }
+
+    // Feed your pet
+    void FeedPet() {
+        std::cout << "\n[ Feeding Pet 🥩 ]\n";
         switch (pHunger) {
-            case Starving: pHunger = Hungry; pMood = PetMood::Angry; break;
-            case Hungry: pHunger = Satisfied; pMood = PetMood::Happy; break;
-            case Satisfied: pHunger = Full; pMood = PetMood::Playful; break;
-            case Full: std::cout << " Ya pet is Already Full "; pMood = PetMood::Playful; break;
-            default: std::cout << " Yout pet isn't eating cux you ain't feeding it ";break;
+            case Starving: pHunger = Hungry; pMood = Angry; break;
+            case Hungry: pHunger = Satisfied; pMood = Happy; break;
+            case Satisfied: pHunger = Full; pMood = Playful; break;
+            case Full:
+                std::cout << " Ya pet is Already Full ";
+                pMood = Playful;
+                break;
+            default:
+                std::cout << " Ya pet ain't eating cux you ain't feeding it \n ";
+                break;
         }
     }
 
-    // Playing makes your pet hungrier and affects mood
-    void PlayWithPet(){
-        std::cout << " This will Decrease ya pet's hunger lvl \n ";
+    // Play with your pet
+    void PlayWithPet() {
+        std::cout << "\n[ Playing With Pet 🎾 ]\n";
         switch (pHunger) {
-            case Full: pHunger = Satisfied; pMood = PetMood::Happy; break;
-            case Satisfied: pHunger = Hungry; pMood = PetMood::Angry; break;
-            case Hungry: pHunger = Starving; pMood = PetMood::Sad; break;
-            case Starving: std::cout << " Ya Pet is Starving feed it or it'll die of hunger ";pMood = PetMood::Sick; break;
-            default: std::cout << " Feed ya pet ";break;
+            case Full: pHunger = Satisfied; pMood = Happy; break;
+            case Satisfied: pHunger = Hungry; pMood = Angry; break;
+            case Hungry: pHunger = Starving; pMood = Sad; break;
+            case Starving:
+                std::cout << " Ya Pet is Starving feed it or it'll die of hunger \n ";
+                pMood = Sick;
+                break;
+            default:
+                std::cout << " Feed ya pet ";
+                break;
         }
     }
 
-    // Show all the current stats of the pet
-    void petStats(){
+    // Show pet stats
+    void petStats() {
+        std::cout << "\n[ 🐾 Pet Stats ]\n";
         std::cout << " Ya Pet's Name : " << pName
                   << "\n Ya Pet's Age : " << pAge
                   << "\n Ya Pet's a : " << getPetType(pType)
@@ -134,144 +148,165 @@ public:
                   << "\n Ya Pet's Mood : " << getPetMood(pMood)
                   << "\n Ya Pet's Hunger Lvl : " << getPetHunger(pHunger) << "\n";
     }
+
+    // Abstract methods
+    virtual void SpeakUp() = 0;
+    virtual void Unsatisfied() = 0;
 };
 
-// Dog class (inherits PetAdopting)
-class dogo:public PetAdopting {
-public:
-    dogo(std::string dName,int dAge,PetColor dColor)
-        :PetAdopting(dName,dAge,PetType::Dog,dColor,PetMood::Happy, PetHungerLvl::Full){}
+// ---------- DERIVED CLASSES ----------
 
-    void Barking(){
+class dogo : public PetAdopting {
+public:
+    dogo(std::string dName, int dAge, PetColor dColor)
+        : PetAdopting(dName, dAge, Dog, dColor, Happy, Full) {}
+
+    void SpeakUp() override {
         std::cout << "Woof Woof! \n ";
     }
-};
 
-// Cat class
-class cato:public PetAdopting {
-public:
-    cato(std::string cName,int cAge,PetColor cColor)
-        :PetAdopting(cName,cAge,PetType::Cat,cColor,PetMood::Happy,PetHungerLvl::Full){}
-
-    void Meowing(){
-        std::cout << " Meow Meow! \n " ;
+    void Unsatisfied() override {
+        std::cout << " Ruff... whimper... (why you do me like that, hooman)? \n ";
     }
 };
 
-// Hamster class
-class hamstero:public PetAdopting {
+class cato : public PetAdopting {
 public:
-    hamstero(std::string hName,int hAge,PetColor hColor)
-        :PetAdopting(hName,hAge,PetType::Hamster,hColor,PetMood::Happy,PetHungerLvl::Full){}
+    cato(std::string cName, int cAge, PetColor cColor)
+        : PetAdopting(cName, cAge, Cat, cColor, Happy, Full) {}
 
-    void Squeak(){
+    void SpeakUp() override {
+        std::cout << " Meow Meow! \n ";
+    }
+
+    void Unsatisfied() override {
+        std::cout << " Mreeeoooww! (You forgot to feed me AGAIN? Do you even want me to LIVE?) \n ";
+    }
+};
+
+class hamstero : public PetAdopting {
+public:
+    hamstero(std::string hName, int hAge, PetColor hColor)
+        : PetAdopting(hName, hAge, Hamster, hColor, Happy, Full) {}
+
+    void SpeakUp() override {
         std::cout << " Squeak Squeak! \n ";
     }
-};
 
-// Bunny class
-class bunnyy:public PetAdopting {
-public:
-    bunnyy(std::string bName,int bAge,PetColor bColor)
-        :PetAdopting(bName,bAge,PetType::Bunny,bColor,PetMood::Happy,PetHungerLvl::Full){}
-
-    void Purrs(){
-        std::cout << " Purrs Purrs! \n ";
+    void Unsatisfied() override {
+        std::cout << " ...squeak... (I miss my sunflower seeds... you're soo CRUEL Hooman) \n ";
     }
 };
 
-int main(){
-    // Collect pet details
-    int age, color;
+class bunnyy : public PetAdopting {
+public:
+    bunnyy(std::string bName, int bAge, PetColor bColor)
+        : PetAdopting(bName, bAge, Bunny, bColor, Happy, Full) {}
+
+    void SpeakUp() override {
+        std::cout << " Purrs Purrs! \n ";
+    }
+
+    void Unsatisfied() override {
+        std::cout << " *Thump!* (I'm not vibing with this energy, human. You're all same CRUEL Beings) \n ";
+    }
+};
+
+// ---------- MAIN FUNCTION ----------
+
+PetAdopting* pet = nullptr;
+
+int main() {
+    int age,color;
     std::string name;
     char op;
 
-    std::cout << " What's ya pet's Name: ";
-    std::getline(std::cin >> std::ws, name); // get full name even with spaces
+    std::cout << "\n========= WELCOME TO VIRTUAL PET ADOPTION SIM =========\n";
 
-    std::cout << " What's ya pet's age: ";
-    std::cin >> age;
+    // Input pet name
+    std::cout << " What's Pet's name ?: ";
+    std::getline(std::cin >> std::ws, name);
 
-    std::cout << " What's ya pet's color: \n ";
-    std::cout << "Black[1] \nBrown[2] \nGray[3] \nWhite[4] \nBiege[5] \n ";
+    // Input color
+    std::cout << " What's ya Pet's Color ?\n";
+    std::cout << "Black[1] | Brown[2] | Gray[3] | White[4] | Biege[5] : ";
     std::cin >> color;
 
-    std::cout << "Dog[1] \nCat[2] \nBunny[3] \nHamster[4] \n ";
-    std::cin >> op;
+    // Input age
+    std::cout << " What's ya Pet's Age ? : ";
+    std::cin >> age;
 
-    // IF-ELSE chain to handle different pet types
-    if(op == '1'){
-        dogo dobj(name, age, static_cast<PetColor>(color));  // create dog object
+    // Loop until valid pet is created
+    while(!pet){
+        std::cout << "\nChoose ya Pet \n";
+        std::cout << "Dog[1] \nCat[2] \nHamster[3] \nBunny[4] : ";
+        std::cin >> op;
 
-        char dop;
-        while(true){
-            std::cout << "\n What do you wanna do?\n";
-            std::cout << " Play with ya dog [P] \n Feed ya dog [F] \n Show pet stats [S] \n Quit [Q] \n ";
-            std::cin >> dop;
-
-            switch (dop) {
-                case 'P': dobj.Barking(); dobj.PlayWithPet(); break;
-                case 'F': dobj.FeedPet(); break;
-                case 'S': dobj.petStats(); break;
-                case 'Q': exit(EXIT_SUCCESS); break;
-                default: std::cout << " Try again \n "; break;
-            }
+        switch (op) {
+            case '1': pet = new dogo(name, age, static_cast<PetColor>(color)); break;
+            case '2': pet = new cato(name, age, static_cast<PetColor>(color)); break;
+            case '3': pet = new hamstero(name, age, static_cast<PetColor>(color)); break;
+            case '4': pet = new bunnyy(name, age, static_cast<PetColor>(color)); break;
+            default:
+                std::cout << "bruh dude what're you doing ? there's nothing as " << op << " here use ya eyes fr fr \n";
+                continue;
         }
     }
-    else if(op == '2'){
-        cato cobj(name, age, static_cast<PetColor>(color));
 
-        char cop;
-        while(true){
-            std::cout << "\n What do you wanna do?\n";
-            std::cout << " Play with ya cat [P] \n Feed ya cat [F] \n Show pet stats [S] \n Quit [Q] \n ";
-            std::cin >> cop;
+    int dangerWarning = 0; // Hunger warning counter
 
-            switch (cop) {
-                case 'P': cobj.Meowing(); cobj.PlayWithPet(); break;
-                case 'F': cobj.FeedPet(); break;
-                case 'S': cobj.petStats(); break;
-                case 'Q': exit(EXIT_SUCCESS); break;
-                default: std::cout << " Try again \n "; break;
-            }
-        }
-    }
-    else if (op == '3') {
-        hamstero hobj(name, age, static_cast<PetColor>(color));
+    // Game loop
+    while (true) {
+        char choice;
 
-        char hop;
-        while(true){
-            std::cout << "\n What do you wanna do?\n";
-            std::cout << " Play with ya hamster [P] \n Feed ya hamster [F] \n Show pet stats [S] \n Quit [Q] \n ";
-            std::cin >> hop;
+        std::cout << "\n========== What do you wanna do? ==========\n";
+        std::cout << "Feed The Pet[F]\nPlay With Pet[P]\nDisplay Pet's Stats[S]\nQuit[Q]\n";
+        std::cout << " Note : \"When Death Warning reaches 3 ya pet will die. So, to keep it alive \" \n ";
+        std::cout << "Death Warning : " << dangerWarning << "\n";
+        std::cin >> choice;
 
-            switch (hop) {
-                case 'P': hobj.Squeak(); hobj.PlayWithPet(); break;
-                case 'F': hobj.FeedPet(); break;
-                case 'S': hobj.petStats(); break;
-                case 'Q': exit(EXIT_SUCCESS); break;
-                default: std::cout << " Try again \n "; break;
-            }
-        }
-    }
-    else if(op == '4'){
-        bunnyy bobj(name, age, static_cast<PetColor>(color));
+        switch (choice) {
+            case 'F':
+                pet->FeedPet();
+                dangerWarning = 0; // Reset after feeding
+                break;
 
-        char bop;
-        while(true){
-            std::cout << "\n What do you wanna do?\n";
-            std::cout << " Play with ya bunny [P] \n Feed ya bunny [F] \n Show pet stats [S] \n Quit [Q] \n ";
-            std::cin >> bop;
+            case 'P':
+                pet->PlayWithPet();
 
-            switch (bop) {
-                case 'P': bobj.Purrs(); bobj.PlayWithPet(); break;
-                case 'F': bobj.FeedPet(); break;
-                case 'S': bobj.petStats(); break;
-                case 'Q': exit(EXIT_SUCCESS); break;
-                default: std::cout << " Try again \n "; break;
-            }
+                // Check mood and respond
+                if (pet->getMood() == Happy) {
+                    pet->SpeakUp();
+                } else if (pet->getMood() == Sad || pet->getMood() == Sick || pet->getMood() == Angry) {
+                    pet->Unsatisfied();
+                }
+
+                // Starving check
+                if (pet->getHunger() == Starving) {
+                    dangerWarning++;
+                }
+
+                if (dangerWarning >= 3) {
+                    std::cout << " Ya Pet died 💀\n";
+                    delete pet;
+                    exit(EXIT_SUCCESS);
+                }
+                break;
+
+            case 'S':
+                pet->petStats();
+                break;
+
+            case 'Q':
+                std::cout << " Exiting...\n";
+                delete pet;
+                exit(EXIT_SUCCESS);
+
+            default:
+                std::cout << " Bruh You're blind even with ya eyes there's no such option as " << choice << " \n ";
         }
     }
 
     return 0;
 }
+
