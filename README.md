@@ -1,22 +1,24 @@
-🐾 Pet Sim – Updated Version
+🐾 Pet Sim – Updated Version 2.0
 
-So yeah... this is my updated version of the pet sim I made earlier 😤
-I rewrote a bunch of stuff, added pointers, cleaned it up a bit, and used polymorphism (without fully studying it lol). Still learned a lot on the way tho.
+Yo, this is my upgraded pet sim from yesterday!
+I added some cool new stuff today like energy levels and a sleep function, so your pet’s gotta chill sometimes or else it’ll suffer the consequences 🥱💀.
+
+I’m still kinda winging polymorphism, pointers, and enums, but I’m learning as I go — no cap.
 
 
 ---
 
 🎮 What It Does
 
-You adopt a pet (dog, cat, hamster, or bunny)
+Adopt a pet (dog, cat, hamster, bunny) with name, color, and age
 
-Give it a name, color, and age
+Feed, play, sleep, or check stats for your pet
 
-You can feed, play, or check stats
+Pet’s mood, hunger, and energy levels change based on what you do
 
-It has mood and hunger levels that change depending on what you do
+Ignore your pet too much and it might die from hunger or lack of sleep 😭
 
-If you mess up too much and ignore it — your pet dies 💀
+Pets have unique sounds and reactions thanks to polymorphism
 
 
 
@@ -24,17 +26,19 @@ If you mess up too much and ignore it — your pet dies 💀
 
 🧠 What I Used
 
-Enums for pet mood, hunger, type, color (way cleaner than if spam)
+Enums for pet type, color, mood, hunger, and energy (way cleaner than tons of if’s)
 
-OOP (class inheritance + virtual functions)
+OOP with inheritance + virtual functions for pet behaviors
 
-Polymorphism — pet reacts differently depending on type
+Polymorphism so pets act different when they speak, sleep, or get annoyed
 
-new and delete for dynamic memory (I actually remembered this time 😭)
+Dynamic memory with new and delete (finally got that down)
 
-Switch cases instead of long-ass if chains
+Switch statements for cleaner control flow
 
-Good ol’ while (true) game loop for the menu
+While(true) game loop for the menu system
+
+Used toupper() for input flexibility
 
 
 
@@ -42,8 +46,11 @@ Good ol’ while (true) game loop for the menu
 
 💀 Warnings
 
-If hunger drops too low 3 times (while playing), your pet just... dies.
-Don’t say I didn’t warn you 👀
+If hunger hits starvation 3 times during play, your pet dies 💀
+
+If energy gets too low (dead inside level) 3 times without sleep, your pet also dies from exhaustion
+
+Take care of your virtual buddy or face the consequences 😤
 
 
 
@@ -51,10 +58,10 @@ Don’t say I didn’t warn you 👀
 
 💻 How To Use
 
-1. Paste the code in a file like PetSim.cpp
+1. Copy the full code into PetSim.cpp
 
 
-2. Compile it (I used g++):
+2. Compile it with:
 
 g++ PetSim.cpp -o PetSim
 
@@ -67,24 +74,36 @@ g++ PetSim.cpp -o PetSim
 
 
 ---
+
 😎 Why I Made This Update
 
-So I made the first version yesterday and looked at it again today like…
-“Okay this is cool but also kinda basic 💀”
-So I cleaned it up — added virtual functions, used pointers instead of manually making objects, made everything more organized, and added some flavor to the gameplay.
-It’s still the same pet sim idea, but now it’s ✨fancier✨ and actually uses some proper C++ stuff.
+Yesterday’s version was cool but basic AF, so today I:
+
+Added energy levels to make pets more realistic
+
+Created a SleepPet() function and sleep behaviors for each pet
+
+Made pets respond differently when they’re sleepy or annoyed
+
+Improved the menu with new sleep option Z
+
+Made death happen both from starvation AND exhaustion
+
+
+It’s still the same fun pet sim, just now with more personality and challenge.
 
 
 ---
+
 🧪 Future Stuff (maybe lol)
 
-Saving pet stats to a file
+Save pet stats to a file and load later
 
-Adding more moods or actions
+More moods, actions, and sounds (because why not?)
 
-A pet health bar? IDK
+Add a health bar or more detailed pet stats
 
-Maybe use vector someday when I understand it 💀
+Switch to vectors for dynamic arrays once I stop being scared of them 😭
 
 
 
@@ -93,8 +112,8 @@ Maybe use vector someday when I understand it 💀
 ✍️ Made by
 
 Nyx / Eclipse
-High school coder just wingin’ it 😤
-I be programming one day, then forgetting how new works the next 😭
+High school coder, struggling but grinding every day 😤
+One day I’m a C++ beast, next day I forget where I put my new keyword 😂
 
 
----
+----
